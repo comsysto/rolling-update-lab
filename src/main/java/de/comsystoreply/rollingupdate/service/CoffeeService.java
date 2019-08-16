@@ -27,6 +27,7 @@ public class CoffeeService {
         CoffeeFanEntity entity = repository.findById(username).orElseThrow();
         int cupsDrunk = entity.getCupsDrunk();
         entity.setCupsDrunk(++cupsDrunk);
+        entity.setAppVersion(CoffeeFanEntity.APP_VERSION);
         repository.save(entity);
     }
 }

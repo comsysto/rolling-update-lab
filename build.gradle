@@ -32,9 +32,9 @@ dependencies {
 }
 
 clean {
-	delete file('out')
-	delete file('build')
-	delete file('target')
+	file('out').deleteDir()
+	file('build').deleteDir()
+	file('target').deleteDir()
 }
 
 docker {

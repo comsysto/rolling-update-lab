@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Table(name = "coffee_fans")
 public class CoffeeFanEntity {
-    private static final String APP_VERSION = "v1";
+    public static final String APP_VERSION = "v1";
 
     @Id
     @Column(nullable = false)
