@@ -1,0 +1,59 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.7.RELEASE'
+	id 'java'
+	id 'com.bmuschko.docker-remote-api' version '4.10.0'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'de.comsystoreply'
+version = 'v1.0'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.liquibase:liquibase-core:3.7.0'
+	runtime 'org.postgresql:postgresql:42.2.5'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+clean {
+	delete file('out')
+	delete file('build')
+	delete file('target')
+}
+
+docker {
+	if (System.env.DOCKER_HOST) {
+		url = System.env.DOCKER_HOST.replace("tcp", "https")
+		if (System.env.DOCKER_CERT_PATH) {
+			certPath = new File(System.env.DOCKER_CERT_PATH)
+		}
+	} else {
+		url = 'unix:///var/run/docker.sock'
+	}
+}
+
+import com.bmuschko.gradle.docker.tasks.image.*
+
+task buildDockerImage(type: DockerBuildImage) {
+	dependsOn bootJar
+
+	inputDir = file('.')
+
+	tags.add('rollingupdate:' + version)
+}

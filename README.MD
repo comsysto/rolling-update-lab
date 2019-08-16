@@ -1,0 +1,1 @@
+Playground for performing rolling updates with database forward/backward compatibility

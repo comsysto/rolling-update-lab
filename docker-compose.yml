@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:9.6.14-alpine
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: rollingupdate
+  app:
+    image: rollingupdate:v1.0
+    ports:
+      - "8080:8080"
+    environment:
+      JAVA_OPTS: "-Dspring.datasource.host=postgres -Dspring.datasource.port=5432"
